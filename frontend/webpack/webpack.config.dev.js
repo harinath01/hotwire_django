@@ -25,6 +25,10 @@ module.exports = merge(common, {
     devMiddleware: {
       writeToDisk: true,
     },
+    watchFiles: [
+      Path.join(__dirname, '../../hotwire_django_app/**/*.py'),
+      Path.join(__dirname, '../../hotwire_django_app/**/*.html'),
+    ],
   },
   plugins: [
     new Webpack.DefinePlugin({
