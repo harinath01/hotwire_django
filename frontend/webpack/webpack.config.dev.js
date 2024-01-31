@@ -27,7 +27,7 @@ module.exports = merge(common, {
     },
     watchFiles: [
       Path.join(__dirname, '../../hotwire_django_app/**/*.py'),
-      Path.join(__dirname, '../../hotwire_django_app/**/*.html'),
+      Path.join(__dirname, '../../templates/**/*.html'),
     ],
   },
   plugins: [
