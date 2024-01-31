@@ -39,8 +39,16 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
 
     "webpack_boilerplate",
-    "tasks"
+    "tasks",
+
+    'crispy_forms',
+    'crispy_tailwind',
 ]
+
+
+CRISPY_ALLOWED_TEMPLATE_PACKS = "tailwind"
+
+CRISPY_TEMPLATE_PACK = "tailwind"
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
@@ -58,6 +66,7 @@ TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
         "DIRS": [BASE_DIR / "templates"],
+        "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
                 "django.template.context_processors.debug",
@@ -130,3 +139,4 @@ STATICFILES_DIRS = [
 WEBPACK_LOADER = {
     'MANIFEST_FILE': str(BASE_DIR / "frontend/build/manifest.json"),
 }
+

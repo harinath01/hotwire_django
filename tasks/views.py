@@ -1,3 +1,16 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 
-# Create your views here.
+from .forms import TaskForm
+
+
+def create_view(request):
+    if request.method == 'POST':
+        form = TaskForm(request.POST)
+        if form.is_valid():
+            form.save()
+
+            return redirect('/')
+    else:
+        form = TaskForm()
+
+    return render(request, 'tasks/create.html', {'form': form})
