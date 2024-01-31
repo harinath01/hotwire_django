@@ -38,7 +38,8 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
 
-    "webpack_boilerplate"
+    "webpack_boilerplate",
+    "tasks"
 ]
 
 MIDDLEWARE = [
