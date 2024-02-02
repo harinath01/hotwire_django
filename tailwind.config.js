@@ -7,7 +7,7 @@ const pySitePackages = process.env.pySitePackages;
 
 // We can add current project paths here
 const projectPaths = [
-    Path.join(pwd, "./hotwire_django_app/templates/**/*.html"),
+    Path.join(pwd, "./templates/**/*.html"),
     // add js file paths if you need
 ];
 

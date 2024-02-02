@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
 
 from .forms import TaskForm
+from tasks.models import Task
 
 
 def create_view(request):
@@ -14,3 +15,9 @@ def create_view(request):
         form = TaskForm()
 
     return render(request, 'tasks/create.html', {'form': form})
+
+
+def list_view(request):
+    tasks = Task.objects.all().order_by('-pk')
+
+    return render(request, 'tasks/list.html', {"tasks": tasks})
