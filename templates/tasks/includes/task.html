@@ -1,0 +1,8 @@
+<a class="btn-blue mr-3" href="{% url 'tasks:update' pk=instance.pk %}">
+  Edit
+</a>
+<a class="btn-red mr-3" href="{% url 'tasks:delete' instance.pk %}">
+  Delete
+</a>
+
+{{ instance.due_date }}: {{ instance.title }}
