@@ -1,0 +1,72 @@
+name: Test Changes Detection
+on:
+  workflow_dispatch:
+    inputs:
+      restart_services:
+        description: 'Restart services manually? (y/n)'
+        required: true
+        default: 'n'
+        type: choice
+        options:
+          - 'y'
+          - 'n'
+
+jobs:
+  check-and-restart:
+    runs-on: ubuntu-latest
+    permissions:
+      actions: read
+      contents: read
+    
+    steps:
+      - name: Check out repository code
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0  # This ensures we have the git history
+          
+      - name: Get last successful deployment
+        id: last_deploy
+        run: |
+          LAST_SHA=$(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+            "https://api.github.com/repos/${{ github.repository }}/actions/workflows/test-changes.yml/runs?status=success&per_page=1" \
+            | jq -r '.workflow_runs[0].head_sha')
+          echo "last_sha=$LAST_SHA" >> $GITHUB_OUTPUT
+          echo "Found last successful deployment SHA: $LAST_SHA"
+
+      - name: Check for changes in target directory
+        id: check_changes
+        run: |
+          LAST_SHA=${{ steps.last_deploy.outputs.last_sha }}
+          if [ -z "$LAST_SHA" ]; then
+            echo "No previous successful run found, using previous commit"
+            LAST_SHA=$(git rev-parse HEAD~1)
+          fi
+          echo "Comparing changes between $LAST_SHA and current commit"
+          
+          # Check for changes in src directory (modify this path as needed)
+          CHANGES=$(git diff --name-only $LAST_SHA HEAD | grep -E '^src/' || echo "")
+          
+          if [ -n "$CHANGES" ]; then
+            echo "changes_detected=true" >> $GITHUB_OUTPUT
+            echo "Changes found in src directory:"
+            echo "$CHANGES"
+          else
+            echo "changes_detected=false" >> $GITHUB_OUTPUT
+            echo "No changes detected in src directory"
+          fi
+
+      - name: Simulate service restart
+        if: ${{ github.event.inputs.restart_services == 'y' || steps.check_changes.outputs.changes_detected == 'true' }}
+        run: |
+          echo "Would restart services because:"
+          if [ "${{ github.event.inputs.restart_services }}" == "y" ]; then
+            echo "- Manual restart was requested"
+          fi
+          if [ "${{ steps.check_changes.outputs.changes_detected }}" == "true" ]; then
+            echo "- Changes were detected in src directory"
+          fi
+          
+          # Simulate service restart
+          echo "Restarting services..."
+          sleep 2
+          echo "Services restarted successfully!"
