@@ -44,7 +44,7 @@ jobs:
           echo "Comparing changes between $LAST_SHA and current commit"
           
           # Check for changes in src directory (modify this path as needed)
-          CHANGES=$(git diff --name-only $LAST_SHA HEAD | grep -E '^src/' || echo "")
+          CHANGES=$(git diff --name-only $LAST_SHA HEAD | grep -E '^hotwire_django_app/' || echo "")
           
           if [ -n "$CHANGES" ]; then
             echo "changes_detected=true" >> $GITHUB_OUTPUT
